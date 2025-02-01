@@ -16,7 +16,7 @@ namespace ModulesGT.Save
             return DataSaver.Load<T>();
         }
         
-        private static void RemoveGameData()
+        public static void RemoveGameData()
         {
             string filePath = Path.Combine(Application.persistentDataPath, "Data", $"{typeof(T).Name}.json");
             if (File.Exists(filePath))
