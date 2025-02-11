@@ -8,10 +8,9 @@ namespace ModulesGT.Audio
     public class AudioManager : MonoBehaviour
     {
         [SerializeField] private AudioMixer audioMixer;
-        [SerializeField] private AudioConfig[] audioConfigs;
 
         private List<AudioSource> audioSources;
-        private const string SoundFxParam = "Effects";
+        private const string SoundFxParam = "SoundFx";
         private const string MusicParam = "Music";
 
         private void Awake()
@@ -19,15 +18,8 @@ namespace ModulesGT.Audio
             audioSources = new List<AudioSource>(GetComponents<AudioSource>());
         }
 
-        public void Play(AudioType audioType)
+        public void Play(AudioConfig config)
         {
-            var config = audioConfigs.FirstOrDefault(c => c.AudioType == audioType);
-            if (config == null)
-            {
-                Debug.LogError($"AudioConfig for {audioType} is not found. Please check the configuration.");
-                return;
-            }
-
             if (IsPlaying(config, out var activeSource) && activeSource.loop)
             {
                 activeSource.Stop();
@@ -39,6 +31,14 @@ namespace ModulesGT.Audio
             source.loop = config.Loop;
             source.volume = config.Volume;
             source.Play();
+        }
+
+        public void Stop(AudioConfig config)
+        {
+            if (IsPlaying(config, out var source))
+            {
+                source.Stop();
+            }
         }
 
         public void SetSoundFx(bool isEnabled)
