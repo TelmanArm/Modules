@@ -26,7 +26,6 @@ namespace ModulesGT.UI
         {
             var presenter = InstantiatePresenter<T>();
             presenter.Show(data, onShow);
-            presenter.OnClose += () => CloseCurrent();
             _activePresenters.Push(presenter);
             return presenter;
         }
@@ -44,18 +43,6 @@ namespace ModulesGT.UI
             presenter.Close(onClose);
         }
         
-        public void CloseAll()
-        {
-            if (_activePresenters.Count==0)
-            {
-                return;
-            }
-            while (_activePresenters.Count > 0)
-            {
-                var presenter = _activePresenters.Pop();
-                presenter.Close();
-            }
-        }
         private T InstantiatePresenter<T>() where T : BasePresenter
         {
             if (!_presenters.ContainsKey(typeof(T)))
